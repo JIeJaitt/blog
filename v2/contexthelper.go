@@ -3,11 +3,12 @@ package v2
 import (
 	"context"
 	"sync"
+
+	constant "gl.fotechwealth.com.local/backend/trade-lib.git/contexthelper/constant"
 )
 
-type k int
-
-var contextKey = k(0)
+// use share contextKey
+var ContextKey = constant.SharedContextKey
 
 type valuesMap struct {
 	store     map[string][]interface{}
@@ -24,10 +25,10 @@ func newValuesMap(parentCtx context.Context) *valuesMap {
 
 // Store returns a copy of parent in which the value associated with key is value
 func Store[T any](ctx context.Context, key string, values ...T) context.Context {
-	vm, ok := ctx.Value(contextKey).(*valuesMap)
+	vm, ok := ctx.Value(ContextKey).(*valuesMap)
 	if !ok {
 		vm = newValuesMap(ctx)
-		ctx = context.WithValue(ctx, contextKey, vm)
+		ctx = context.WithValue(ctx, ContextKey, vm)
 	}
 
 	vm.lock.Lock()
@@ -41,10 +42,10 @@ func Store[T any](ctx context.Context, key string, values ...T) context.Context 
 
 // StoreSingleValue returns a copy of parent in which the value associated with key is value
 func StoreSingleValue[T any](ctx context.Context, key string, value T) context.Context {
-	vm, ok := ctx.Value(contextKey).(*valuesMap)
+	vm, ok := ctx.Value(ContextKey).(*valuesMap)
 	if !ok {
 		vm = newValuesMap(ctx)
-		ctx = context.WithValue(ctx, contextKey, vm)
+		ctx = context.WithValue(ctx, ContextKey, vm)
 	}
 
 	vm.lock.Lock()
@@ -65,8 +66,22 @@ func Load[T any](ctx context.Context, key string) (value T) {
 
 // LoadAll returns all value associated with this context for key
 func LoadAll[T any](ctx context.Context, key string) []T {
-	vm, ok := ctx.Value(contextKey).(*valuesMap)
+	vm, ok := ctx.Value(ContextKey).(*valuesMap)
 	if !ok {
+		// handle old version
+		oldMap, ok := ctx.Value(ContextKey).(map[string][]interface{})
+		if ok {
+			if oldValues, found := oldMap[key]; found {
+				var result []T
+				for _, v := range oldValues {
+					if value, ok := v.(T); ok {
+						result = append(result, value)
+					}
+				}
+				return result
+			}
+			return nil
+		}
 		return nil
 	}
 
@@ -79,8 +94,7 @@ func LoadAll[T any](ctx context.Context, key string) []T {
 
 	var result []T
 	for _, v := range values {
-		value, ok := v.(T)
-		if ok {
+		if value, ok := v.(T); ok {
 			result = append(result, value)
 		}
 	}

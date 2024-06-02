@@ -2,19 +2,20 @@ package contexthelper
 
 import (
 	"context"
+
+	constant "gl.fotechwealth.com.local/backend/trade-lib.git/contexthelper/constant"
 )
 
-type k int
-
-var contextKey = k(0)
+// use share contextKey
+var ContextKey = constant.SharedContextKey
 
 // Store returns a copy of parent in which the value associated with key is value
 func Store(ctx context.Context, key string, value interface{}) context.Context {
 	var m map[string][]interface{}
-	i := ctx.Value(contextKey)
+	i := ctx.Value(ContextKey)
 	if i == nil {
 		m = map[string][]interface{}{}
-		ctx = context.WithValue(ctx, contextKey, m)
+		ctx = context.WithValue(ctx, ContextKey, m)
 	} else {
 		m = i.(map[string][]interface{})
 	}
@@ -26,10 +27,10 @@ func Store(ctx context.Context, key string, value interface{}) context.Context {
 // StoreSingleValue returns a copy of parent in which the value associated with key is value
 func StoreSingleValue(ctx context.Context, key string, value interface{}) context.Context {
 	var m map[string][]interface{}
-	i := ctx.Value(contextKey)
+	i := ctx.Value(ContextKey)
 	if i == nil {
 		m = map[string][]interface{}{}
-		ctx = context.WithValue(ctx, contextKey, m)
+		ctx = context.WithValue(ctx, ContextKey, m)
 	} else {
 		m = i.(map[string][]interface{})
 	}
@@ -50,7 +51,7 @@ func Load(ctx context.Context, key string) interface{} {
 
 // LoadAll returns all value associated with this context for key
 func LoadAll(ctx context.Context, key string) []interface{} {
-	i := ctx.Value(contextKey)
+	i := ctx.Value(ContextKey)
 	if i == nil {
 		return nil
 	}

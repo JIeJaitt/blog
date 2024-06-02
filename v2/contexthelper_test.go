@@ -10,6 +10,7 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
+	"gl.fotechwealth.com.local/backend/trade-lib.git/contexthelper"
 	v2 "gl.fotechwealth.com.local/backend/trade-lib.git/contexthelper/v2"
 )
 
@@ -192,4 +193,15 @@ func TestConcurrentReadWhileWrite(t *testing.T) {
 
 	// 等待所有 goroutines 完成
 	wg.Wait()
+}
+
+func TestCompatibility(t *testing.T) {
+	ctx := context.Background()
+
+	// 使用旧版本存储值
+	ctx = contexthelper.Store(ctx, "testKey", "testValue")
+
+	// 尝试使用新版本读取值
+	retrievedValue := v2.Load[string](ctx, "testKey")
+	assert.Equal(t, "testValue", retrievedValue, "The value retrieved by new version should match the value stored by old version.")
 }
