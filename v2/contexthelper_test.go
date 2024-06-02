@@ -88,7 +88,7 @@ func TestWriteDoesNotAffectParentContext(t *testing.T) {
 
 	// 父context不应有子context的值
 	parentValue := v2.Load[string](parentCtx, "childKey")
-	assert.Nil(t, parentValue)
+	assert.Equal(t, "", parentValue)
 }
 
 func TestCascadingReadFromParentContext(t *testing.T) {

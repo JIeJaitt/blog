@@ -36,7 +36,7 @@ func Store[T any](ctx context.Context, key string, values ...T) context.Context 
 		vm.store[key] = append(vm.store[key], value)
 	}
 
-	return ctx 
+	return ctx
 }
 
 // StoreSingleValue returns a copy of parent in which the value associated with key is value
