@@ -92,6 +92,8 @@ func TestWriteDoesNotAffectParentContext(t *testing.T) {
 	assert.Equal(t, "", parentValue)
 }
 
+// TestCascadingReadFromParentContext
+// TODO 优化
 func TestCascadingReadFromParentContext(t *testing.T) {
 	parentCtx := context.Background()
 	parentCtx = v2.Store(parentCtx, "parentKey", "parentValue")
@@ -204,4 +206,46 @@ func TestCompatibility(t *testing.T) {
 	// 尝试使用新版本读取值
 	retrievedValue := v2.Load[string](ctx, "testKey")
 	assert.Equal(t, "testValue", retrievedValue, "The value retrieved by new version should match the value stored by old version.")
+}
+
+// TestWriteDoesNotAffectParent 测试写入只影响当前上下文
+func TestWriteDoesNotAffectParent(t *testing.T) {
+	parentCtx := context.Background()
+	childCtx := context.WithValue(parentCtx, v2.ContextKey, v2.NewValuesMap(parentCtx))
+
+	// 在子上下文中存储值
+	v2.Store(childCtx, "childKey", "childValue")
+
+	// 确认父上下文没有被影响
+	parentValue := v2.Load[string](parentCtx, "childKey")
+	assert.Empty(t, parentValue, "Parent context should not have the child's value")
+}
+
+// TestCascadingRead 测试上下文级联读取
+func TestCascadingReadFromParentContextV2(t *testing.T) {
+	// 创建父上下文并存储值
+	parentCtx := context.Background()
+	parentCtx = v2.Store(parentCtx, "parentKey", "parentValue")
+
+	// 验证父上下文中是否正确存储了值
+	parentValue := v2.Load[string](parentCtx, "parentKey")
+	assert.Equal(t, "parentValue", parentValue, "Value should be stored in parent context")
+
+	// 创建子上下文，并传递父上下文引用
+	childCtx := context.WithValue(parentCtx, v2.ContextKey, v2.NewValuesMap(parentCtx))
+
+	// 子上下文应该能够级联读取父上下文的值
+	childValue := v2.Load[string](childCtx, "parentKey")
+	assert.Equal(t, "parentValue", childValue, "Should retrieve value from parent context")
+
+	// 在子上下文中存储值
+	childCtx = v2.Store(childCtx, "childKey", "childValue")
+
+	// 确保子上下文可以读取自己存储的值
+	valueFromChild := v2.Load[string](childCtx, "childKey")
+	assert.Equal(t, "childValue", valueFromChild, "Should retrieve value stored in child context")
+
+	// 确保父上下文不能读取子上下文存储的值
+	valueFromParent := v2.Load[string](parentCtx, "childKey")
+	assert.Equal(t, "", valueFromParent, "Parent context should not retrieve value stored in child context")
 }

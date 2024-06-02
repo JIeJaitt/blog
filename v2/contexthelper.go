@@ -16,7 +16,7 @@ type valuesMap struct {
 	lock      sync.RWMutex
 }
 
-func newValuesMap(parentCtx context.Context) *valuesMap {
+func NewValuesMap(parentCtx context.Context) *valuesMap {
 	return &valuesMap{
 		store:     make(map[string][]interface{}),
 		parentCtx: parentCtx,
@@ -27,7 +27,7 @@ func newValuesMap(parentCtx context.Context) *valuesMap {
 func Store[T any](ctx context.Context, key string, values ...T) context.Context {
 	vm, ok := ctx.Value(ContextKey).(*valuesMap)
 	if !ok {
-		vm = newValuesMap(ctx)
+		vm = NewValuesMap(ctx)
 		ctx = context.WithValue(ctx, ContextKey, vm)
 	}
 
@@ -44,7 +44,7 @@ func Store[T any](ctx context.Context, key string, values ...T) context.Context 
 func StoreSingleValue[T any](ctx context.Context, key string, value T) context.Context {
 	vm, ok := ctx.Value(ContextKey).(*valuesMap)
 	if !ok {
-		vm = newValuesMap(ctx)
+		vm = NewValuesMap(ctx)
 		ctx = context.WithValue(ctx, ContextKey, vm)
 	}
 
@@ -80,15 +80,19 @@ func LoadAll[T any](ctx context.Context, key string) []T {
 				}
 				return result
 			}
-			return nil
 		}
 		return nil
 	}
 
 	vm.lock.RLock()
 	defer vm.lock.RUnlock()
+	
 	values, ok := vm.store[key]
-	if !ok {
+	if !ok || len(values) == 0 {
+		// 递归查找父上下文
+		if vm.parentCtx != nil {
+			return LoadAll[T](vm.parentCtx, key)
+		}
 		return nil
 	}
 
