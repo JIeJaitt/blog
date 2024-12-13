@@ -1,5 +1,5 @@
 ---
-title: git合并两个仓库
+title: git一些使用经验
 ---
 
 ## 文件目录下怎么看到.ds_store
@@ -78,19 +78,19 @@ https://www.google.com/search?q=%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E4%B8%8B%E6
 1. **提交本地更改**：
    如果你还没有提交本地分支的更改，使用 `git add` 和 `git commit` 来提交这些更改。
 
-   ```bash
-   git add .
-   git commit -m "Your commit message"
-   ```
+```bash
+git add .
+git commit -m "Your commit message"
+```
 
-   替换 `"Your commit message"` 为你的提交信息。
+替换 `"Your commit message"` 为你的提交信息。
 
 2. **拉取远端更改**：
    然后，你可以拉取远端分支的最新更改。
 
-   ```bash
-   git pull origin your-branch-name
-   ```
+```bash
+git pull origin your-branch-name
+```
 
    这里 `your-branch-name` 是你的远端分支名称。
 
@@ -105,8 +105,22 @@ https://www.google.com/search?q=%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E4%B8%8B%E6
 4. **推送更改**：
    一旦合并完成并且没有冲突，你可以将合并后的更改推送到远端仓库。
 
-   ```bash
-   git push origin your-branch-name
-   ```
+```bash
+git push origin your-branch-name
+```
 
 如果你的本地更改和远端更改没有重叠，或者你确定合并不会产生冲突，你也可以选择先合并远端更改，然后再提交你的本地更改。但是，通常建议先提交本地更改，以避免任何潜在的问题。
+
+在多人协作开发时，经常碰到同事把最新修改推送到远程库，你在本地也做了修改，这个时候无论是执行 [git](https://edu.csdn.net/cloud/sd_summit?utm_source=glcblog&spm=1001.2101.3001.7020) pull 还是执行 git push 都会提示错误，我的解决方式如下：
+
+先隐藏掉本地的修改，然后执行 git pull 从代码块拉取最新代码，具体步骤如下：
+
+一. 输入 git [status](https://so.csdn.net/so/search?q=status&spm=1001.2101.3001.7020) 查看本地的修改
+
+二. 输入 git stash 隐藏掉本地修改
+
+三. 输入 git pull 从代码库拉取更新
+
+四. 输入 git stash pop stash@{版本号}
+
+五. git add 、git commit 、git push 搞定
