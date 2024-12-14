@@ -31,42 +31,43 @@ git fetch origin
 2. **合并远端更改**：
    然后，你可以使用 `git merge` 命令将远端分支的更改合并到你的本地分支。
 
-   ```bash
-   git merge origin/your-branch-name
-   ```
+```bash
+git merge origin/your-branch-name
+```
 
-   将 `your-branch-name` 替换为你的远端分支名称。
+将 `your-branch-name` 替换为你的远端分支名称。
 
 3. **解决冲突**：
-   如果合并过程中出现冲突，你需要手动解决这些冲突。解决冲突后，你需要使用 `git add` 添加更改，并使用 `git commit` 提交解决冲突后的代码。
 
-   ```bash
-   git add .
-   git commit -m "Resolve merge conflicts"
-   ```
+如果合并过程中出现冲突，你需要手动解决这些冲突。解决冲突后，你需要使用 `git add` 添加更改，并使用 `git commit` 提交解决冲突后的代码。
+
+```bash
+git add .
+git commit -m "Resolve merge conflicts"
+```
 
 4. **推送到远端**：
-   解决完冲突并提交后，你可以将合并后的更改推送到远端仓库。
-
-   ```bash
-   git push origin your-branch-name
-   ```
+解决完冲突并提交后，你可以将合并后的更改推送到远端仓库。
+```bash
+git push origin your-branch-name
+```
 
 5. **拉取最新的远端更改**：
-   如果你想要将远端的最新更改拉取到本地，可以使用 `git pull` 命令，这个命令实际上是 `git fetch` 后跟 `git merge` 的快捷方式。
+   
+如果你想要将远端的最新更改拉取到本地，可以使用 `git pull` 命令，这个命令实际上是 `git fetch` 后跟 `git merge` 的快捷方式。
 
-   ```bash
-   git pull origin your-branch-name
-   ```
+```bash
+git pull origin your-branch-name
+```
 
-   如果你想要使用 rebase 来整合更改，可以使用 `git pull --rebase`。
+如果你想要使用 rebase 来整合更改，可以使用 `git pull --rebase`。
 
 6. **推送更改**：
-   如果你进行了 rebase 或者合并，并且解决了所有冲突，你可以使用 `git push` 将你的更改推送到远端仓库。
+如果你进行了 rebase 或者合并，并且解决了所有冲突，你可以使用 `git push` 将你的更改推送到远端仓库。
 
-   ```bash
-   git push origin your-branch-name
-   ```
+```bash
+git push origin your-branch-name
+```
 
 请注意，如果你的本地分支是基于远端分支的，通常使用 `git pull`（或 `git pull --rebase`）来合并远端更改是一个更简单的方法，因为它会自动处理合并过程。如果你的本地分支和远端分支是完全不同的分支，那么可能需要更复杂的合并策略。在进行这些操作之前，确保你的工作已经提交，以避免丢失任何更改。
 
@@ -99,15 +100,16 @@ git commit -m "Your commit message"
 git pull origin your-branch-name
 ```
 
-   这里 `your-branch-name` 是你的远端分支名称。
+这里 `your-branch-name` 是你的远端分支名称。
 
 3. **解决合并冲突**：
-   如果 `git pull` 操作导致合并冲突，你需要手动解决这些冲突，然后再次提交。
+   
+如果 `git pull` 操作导致合并冲突，你需要手动解决这些冲突，然后再次提交。
 
-   ```bash
-   git add .
-   git commit -m "Resolve merge conflicts"
-   ```
+```bash
+git add .
+git commit -m "Resolve merge conflicts"
+```
 
 4. **推送更改**：
    一旦合并完成并且没有冲突，你可以将合并后的更改推送到远端仓库。
