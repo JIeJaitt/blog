@@ -6,6 +6,13 @@ title: git一些使用经验
 
 https://www.google.com/search?q=%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E4%B8%8B%E6%80%8E%E4%B9%88%E7%9C%8B%E5%88%B0.ds_store+&sca_esv=d7e7d90bd6b3a957&sxsrf=ADLYWII2FJ08ZuDrPzrR2LkE6E0Yj_zquA%3A1733930448116&ei=0K1ZZ_DjBr3P1e8PpPOLgAo&ved=0ahUKEwjwi7OjgqCKAxW9Z_UHHaT5AqAQ4dUDCA8&uact=5&oq=%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E4%B8%8B%E6%80%8E%E4%B9%88%E7%9C%8B%E5%88%B0.ds_store+&gs_lp=Egxnd3Mtd2l6LXNlcnAiJeaWh-S7tuebruW9leS4i-aAjuS5iOeci-WIsC5kc19zdG9yZSAyCBAAGIAEGKIEMgUQABjvBTIFEAAY7wVImENQ5gJY2UFwB3gBkAECmAHIBKAB9USqAQwwLjMuMjMuNS4xLjG4AQPIAQD4AQGYAgugArkIwgIKEAAYsAMY1gQYR8ICChAjGIAEGCcYigXCAgUQABiABMICCBAAGIAEGMsBwgIGEAAYBxgewgIIEAAYBxgKGB7CAggQABgHGAgYHpgDAIgGAZAGCJIHBzcuMC4zLjGgB95F&sclient=gws-wiz-serp
 
+
+## 设置某一仓库Git信息
+
+```shell
+git config user.name "JIeJaitt"
+git config user.email "498938874@qq.com"
+```
 ## 本地与远端分支同步更新操作指南
 
 ### 我现在本地有更改，远端分支也有新的提交，我该怎么操作
@@ -15,11 +22,11 @@ https://www.google.com/search?q=%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95%E4%B8%8B%E6
 1. **更新本地分支**：
    首先，你需要将远端分支的最新更改拉取到本地。这可以通过 `git fetch` 命令完成，它会从远端仓库获取最新的分支和提交，但不会自动合并到你的当前分支。
 
-   ```bash
-   git fetch origin
-   ```
+```bash
+git fetch origin
+```
 
-   这里 `origin` 是远端仓库的默认名称，如果你的远端仓库有不同的名称，请相应替换。
+这里 `origin` 是远端仓库的默认名称，如果你的远端仓库有不同的名称，请相应替换。
 
 2. **合并远端更改**：
    然后，你可以使用 `git merge` 命令将远端分支的更改合并到你的本地分支。
